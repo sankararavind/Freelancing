@@ -12,11 +12,34 @@
 <!-- Scroll progress -->
 <div class="scroll-progress" #scrollProgress></div>
 
+<!-- Side scroll indicator -->
+<aside class="side-rail" aria-hidden="true">
+  <div class="rail-line"><i [style.height.%]="railFill"></i></div>
+  <ul class="rail-dots">
+    <li *ngFor="let s of sections" [class.active]="activeSection === s.id"></li>
+  </ul>
+</aside>
+
 <app-navbar></app-navbar>
 <main>
   <app-hero></app-hero>
+  <div class="section-divider" aria-hidden="true">
+    <span class="sd-line"></span>
+    <span class="sd-glyph">✦</span>
+    <span class="sd-line"></span>
+  </div>
   <app-services></app-services>
+  <div class="section-divider" aria-hidden="true">
+    <span class="sd-line"></span>
+    <span class="sd-glyph">✧</span>
+    <span class="sd-line"></span>
+  </div>
   <app-portfolio></app-portfolio>
+  <div class="section-divider" aria-hidden="true">
+    <span class="sd-line"></span>
+    <span class="sd-glyph">▲</span>
+    <span class="sd-line"></span>
+  </div>
   <app-contact></app-contact>
 </main>
 <footer class="glass">
@@ -149,4 +172,114 @@
     transition: width 0.1s linear;
   }
 
+  /* Side rail */
+  .side-rail {
+    position: fixed;
+    top: 50%;
+    right: 28px;
+    transform: translateY(-50%);
+    z-index: 900;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    pointer-events: none;
+  }
+
+  .rail-line {
+    width: 2px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .rail-line i {
+    display: block;
+    width: 100%;
+    background: linear-gradient(180deg, var(--accent-color), #ff9a3c);
+    box-shadow: 0 0 8px var(--accent-color);
+    transition: height 0.2s linear;
+  }
+
+  .rail-dots {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .rail-dots li {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.4s ease;
+  }
+
+  .rail-dots li.active {
+    transform: scale(1.6);
+    background: var(--accent-color);
+    box-shadow: 0 0 12px var(--accent-color);
+  }
+
+  /* Section dividers */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .sd-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255,255,255,0.12) 50%,
+      transparent 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sd-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -30%;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(90deg,
+      transparent,
+      var(--accent-color),
+      transparent);
+    animation: dividerSweep 6s ease-in-out infinite;
+  }
+
+  @keyframes dividerSweep {
+    0%   { left: -30%; }
+    50%  { left: 100%; }
+    100% { left: 100%; }
+  }
+
+  .sd-glyph {
+    color: var(--accent-color);
+    font-size: 1.1rem;
+    animation: spinSlow 14s linear infinite;
+    display: inline-block;
+  }
+
+  @media (max-width: 1100px) {
+    .side-rail { display: none; }
+  }
 </style>

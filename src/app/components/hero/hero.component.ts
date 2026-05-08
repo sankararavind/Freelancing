@@ -479,11 +479,35 @@ import { gsap } from 'gsap';
         margin-right: 0;
         margin-left: 0;
         margin-top: 40px;
+        max-width: 100%;
       }
       .stats-row {
         flex-wrap: wrap;
-        gap: 24px;
+        gap: 20px 28px;
+        margin-top: 60px;
       }
+    }
+
+    @media (max-width: 640px) {
+      .hero-section {
+        padding: 100px 0 80px;
+      }
+      .main-title {
+        font-size: clamp(2.5rem, 14vw, 4rem);
+        margin-bottom: 28px;
+      }
+      .sub-greeting { font-size: 1rem; }
+      .desc-box p { font-size: 0.95rem; }
+      .stats-row {
+        gap: 16px 24px;
+        margin-top: 50px;
+      }
+      .stat-item {
+        flex: 1 1 calc(50% - 24px);
+        min-width: 120px;
+      }
+      .scroll-hint { display: none; }
+      .floating-badge { display: none; }
     }
   `]
 })

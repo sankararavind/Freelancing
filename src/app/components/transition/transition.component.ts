@@ -11,60 +11,107 @@ gsap.registerPlugin(ScrollToPlugin);
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="transition-curtain" #curtain>
-      <div class="curtain-layer layer-1"></div>
-      <div class="curtain-layer layer-2"></div>
-      <div class="logo-reveal" #logo>Aravind</div>
+    <div class="loader-overlay" #overlay aria-hidden="true">
+      <div class="loader-shade" #shade></div>
+      <div class="loader-bar-wrap">
+        <div class="loader-bar" #bar></div>
+      </div>
+      <div class="loader-dots" #dots>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="loader-label" #label>
+        <span class="arrow-mark">→</span>
+        <span class="label-text" #labelText>Loading</span>
+      </div>
     </div>
   `,
   styles: [`
-    .transition-curtain {
+    .loader-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       z-index: 9999;
       pointer-events: none;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
+      gap: 18px;
     }
 
-    .curtain-layer {
+    .loader-shade {
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 5, 5, 0.6);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      opacity: 0;
+    }
+
+    .loader-bar-wrap {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
+      height: 3px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .loader-bar {
+      width: 100%;
       height: 100%;
-      transform: translateY(100%);
+      transform: scaleX(0);
+      transform-origin: left;
+      background: linear-gradient(90deg, var(--accent-color), #ff9a3c, var(--accent-color));
+      box-shadow: 0 0 18px var(--accent-color);
     }
 
-    .layer-1 {
-      background: var(--accent-color);
-      z-index: 1;
-    }
-
-    .layer-2 {
-      background: #000;
+    .loader-dots {
+      display: flex;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(8px);
+      position: relative;
       z-index: 2;
     }
 
-    .logo-reveal {
-      position: relative;
-      z-index: 3;
-      font-size: 4rem;
-      font-weight: 800;
+    .loader-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      box-shadow: 0 0 12px var(--accent-color);
+    }
+
+    .loader-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
       color: #fff;
+      font-size: 0.8rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      font-weight: 700;
       opacity: 0;
-      transform: scale(0.8);
-      letter-spacing: -2px;
+      transform: translateY(8px);
+      position: relative;
+      z-index: 2;
+    }
+
+    .arrow-mark {
+      color: var(--accent-color);
     }
   `]
 })
 export class TransitionComponent implements OnInit {
-  @ViewChild('curtain') curtain!: ElementRef;
-  @ViewChild('logo') logo!: ElementRef;
+  @ViewChild('overlay') overlay!: ElementRef<HTMLDivElement>;
+  @ViewChild('shade') shade!: ElementRef<HTMLDivElement>;
+  @ViewChild('bar') bar!: ElementRef<HTMLDivElement>;
+  @ViewChild('dots') dots!: ElementRef<HTMLDivElement>;
+  @ViewChild('label') label!: ElementRef<HTMLDivElement>;
+  @ViewChild('labelText') labelText!: ElementRef<HTMLSpanElement>;
 
   constructor(private transitionService: TransitionService) {}
 
@@ -74,53 +121,54 @@ export class TransitionComponent implements OnInit {
     });
   }
 
-  playTransition(targetId: string) {
-    const tl = gsap.timeline({
-      onComplete: () => {
-        // Reset curtain pointer events if needed
-      }
-    });
+  private playTransition(targetId: string) {
+    const sectionName = (targetId.replace('#', '') || 'top').toUpperCase();
+    this.labelText.nativeElement.textContent = sectionName;
 
-    // Disable interactions during transition
     document.body.style.pointerEvents = 'none';
 
-    tl.to('.curtain-layer', {
-      y: '0%',
-      duration: 0.8,
-      stagger: 0.1,
-      ease: 'power4.inOut'
-    })
-    .to(this.logo.nativeElement, {
-      opacity: 1,
-      scale: 1,
-      duration: 0.4,
-      ease: 'back.out(1.7)'
-    }, '-=0.2')
-    .add(() => {
-      // Mid-transition: Scroll to target
-      gsap.to(window, {
-        duration: 0.1,
-        scrollTo: targetId,
-        ease: 'power2.out'
-      });
-    }, '+=0.2')
-    .to(this.logo.nativeElement, {
-      opacity: 0,
-      scale: 1.2,
-      duration: 0.3,
-      ease: 'power2.in'
-    }, '+=0.5')
-    .to('.curtain-layer', {
-      y: '-100%',
-      duration: 0.8,
-      stagger: -0.1,
-      ease: 'power4.inOut',
+    const tl = gsap.timeline({
       onComplete: () => {
-        // Re-enable interactions
-        document.body.style.pointerEvents = 'all';
-        // Reset layers for next time
-        gsap.set('.curtain-layer', { y: '100%' });
+        document.body.style.pointerEvents = '';
+        gsap.set([this.bar.nativeElement], { scaleX: 0 });
       }
     });
+
+    // Quick fade in shade + label + bouncing dots
+    tl.to(this.shade.nativeElement, {
+      opacity: 1, duration: 0.25, ease: 'power2.out'
+    })
+      .to([this.label.nativeElement, this.dots.nativeElement], {
+        opacity: 1, y: 0, duration: 0.3, ease: 'power3.out'
+      }, '-=0.15')
+      .to(this.bar.nativeElement, {
+        scaleX: 1, duration: 0.55, ease: 'power3.inOut'
+      }, '-=0.25')
+      // Bouncing dots
+      .to(this.dots.nativeElement.querySelectorAll('span'), {
+        y: -8,
+        duration: 0.3,
+        stagger: { each: 0.1, yoyo: true, repeat: 1 },
+        ease: 'sine.inOut'
+      }, '-=0.55')
+      // Scroll while loader is up
+      .add(() => {
+        gsap.to(window, {
+          duration: 0.1,
+          scrollTo: { y: targetId, offsetY: 80 },
+          ease: 'power2.out'
+        });
+      }, '-=0.2')
+      // Fade out everything
+      .to([this.label.nativeElement, this.dots.nativeElement], {
+        opacity: 0, y: -8, duration: 0.25, ease: 'power2.in'
+      }, '+=0.05')
+      .to(this.shade.nativeElement, {
+        opacity: 0, duration: 0.35, ease: 'power2.in'
+      }, '-=0.2')
+      .to(this.bar.nativeElement, {
+        scaleX: 0, transformOrigin: 'right',
+        duration: 0.5, ease: 'power3.inOut'
+      }, '-=0.4');
   }
 }

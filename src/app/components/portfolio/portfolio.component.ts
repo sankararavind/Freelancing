@@ -87,18 +87,32 @@ gsap.registerPlugin(ScrollTrigger);
       font-weight: 800;
       letter-spacing: -0.02em;
       color: rgba(255,255,255,0.35);
+      will-change: transform;
+    }
+
+    .marquee:hover .marquee-track {
+      animation-play-state: paused;
     }
 
     .marquee-track span {
       display: inline-flex;
       align-items: center;
       gap: 40px;
+      transition: color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+
+    .marquee-track span:hover {
+      color: #fff;
+      transform: scale(1.05);
     }
 
     .marquee-track i {
       color: var(--accent-color);
       font-style: normal;
       font-size: 0.8em;
+      display: inline-block;
+      animation: spinSlow 8s linear infinite;
     }
 
     .container {
