@@ -518,11 +518,11 @@ export class HeroComponent implements AfterViewInit {
   @ViewChild('magneticBtn') magneticBtn!: ElementRef<HTMLButtonElement>;
 
   stats = [
-    { num: "/ 01", label: "Web Design" },
-    { num: "/ 02", label: "Branding" },
-    { num: "/ 03", label: "Saas Design" },
-    { num: "/ 04", label: "Ecommerce" },
-    { num: "/ 05", label: "Product Design" }
+    { num: "/ 01", label: "Hotel Sites" },
+    { num: "/ 02", label: "Restaurant Sites" },
+    { num: "/ 03", label: "Hospital Sites" },
+    { num: "/ 04", label: "Hostel Sites" },
+    { num: "/ 05", label: "Business Apps" }
   ];
 
   firstLineWords = ['FULL', 'STACK'];

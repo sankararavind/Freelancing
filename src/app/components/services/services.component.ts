@@ -27,10 +27,16 @@ gsap.registerPlugin(ScrollTrigger);
           <div class="service-card glass"
                #card
                *ngFor="let service of services; let i = index"
+               [class.has-demo]="!!service.link"
                (mousemove)="onTilt($event, i)"
-               (mouseleave)="onTiltLeave(i)">
+               (mouseleave)="onTiltLeave(i)"
+               (click)="openDemo(service)">
             <div class="card-inner">
               <div class="card-number">0{{ i + 1 }}</div>
+              <span class="live-pill" *ngIf="service.link">
+                <span class="live-dot"></span>
+                Live demo
+              </span>
               <div class="icon-box">
                 <span class="icon-glyph">{{service.icon}}</span>
                 <span class="icon-ring"></span>
@@ -41,8 +47,8 @@ gsap.registerPlugin(ScrollTrigger);
                 <span *ngFor="let tag of service.tags">{{tag}}</span>
               </div>
               <div class="learn-more">
-                <span>Learn more</span>
-                <span class="lm-arrow">→</span>
+                <span>{{ service.link ? 'View live demo' : 'Available on request' }}</span>
+                <span class="lm-arrow">{{ service.link ? '↗' : '→' }}</span>
               </div>
             </div>
             <div class="shimmer"></div>
@@ -263,6 +269,49 @@ gsap.registerPlugin(ScrollTrigger);
     .service-card:hover .shimmer {
       left: 200%;
     }
+
+    .service-card.has-demo {
+      cursor: pointer;
+    }
+
+    .service-card.has-demo:hover {
+      border-color: var(--accent-color);
+      box-shadow: 0 30px 60px rgba(255, 77, 0, 0.18);
+    }
+
+    .live-pill {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 77, 0, 0.12);
+      border: 1px solid rgba(255, 77, 0, 0.35);
+      color: var(--accent-color);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      box-shadow: 0 0 0 0 rgba(255, 77, 0, 0.6);
+      animation: livePulse 1.8s ease-out infinite;
+    }
+
+    @keyframes livePulse {
+      0%   { box-shadow: 0 0 0 0    rgba(255, 77, 0, 0.6); }
+      80%  { box-shadow: 0 0 0 10px rgba(255, 77, 0, 0); }
+      100% { box-shadow: 0 0 0 0    rgba(255, 77, 0, 0); }
+    }
   `]
 })
 export class ServicesComponent implements AfterViewInit {
@@ -270,26 +319,53 @@ export class ServicesComponent implements AfterViewInit {
 
   titleWords = ['Services', 'that', 'ship.'];
 
-  services = [
+  services: Array<{
+    title: string;
+    icon: string;
+    desc: string;
+    tags: string[];
+    link?: string;
+  }> = [
+    {
+      title: "Hotel Websites",
+      icon: "✧",
+      desc: "Premium, high-converting websites for hotels with seamless booking integrations.",
+      tags: ["Booking API", "CMS", "Concierge"],
+      link: "https://sankararavind.github.io/Demorestaurant/"
+    },
+    {
+      title: "Restaurant Sites",
+      icon: "◆",
+      desc: "Mouth-watering menus, table reservations, and online ordering built to fill seats.",
+      tags: ["Menus", "Reservations", "Online Order"],
+      link: "https://sankararavind.github.io/paradize/"
+    },
+    {
+      title: "Hospital Sites",
+      icon: "✚",
+      desc: "Trustworthy hospital and clinic websites with appointments and doctor profiles.",
+      tags: ["Appointments", "Doctors", "Patient Portal"],
+      link: "https://sankararavind.github.io/DemoHospital/"
+    },
+    {
+      title: "Hostel Sites",
+      icon: "⬟",
+      desc: "Modern hostel sites with dorm and room bookings, group plans, and rich photo galleries.",
+      tags: ["Bookings", "Multi-room", "Gallery"]
+    },
     {
       title: "Business Applications",
       icon: "✦",
       desc: "Streamlining operations for small-scale companies with custom digital solutions.",
       tags: ["CRM", "Inventory", "Dashboards"]
-    },
-    {
-      title: "Hotel Websites",
-      icon: "✧",
-      desc: "Premium, high-converting websites for hotels with seamless booking integrations.",
-      tags: ["Booking API", "CMS", "Responsive"]
-    },
-    {
-      title: "Custom Software",
-      icon: "▲",
-      desc: "Developing tailored software that scales with your growing business needs.",
-      tags: ["Scalability", "API Dev", "Modern Tech"]
     }
   ];
+
+  openDemo(service: { link?: string }) {
+    if (service.link) {
+      window.open(service.link, '_blank', 'noopener,noreferrer');
+    }
+  }
 
   ngAfterViewInit() {
     gsap.to('.title-word', {
