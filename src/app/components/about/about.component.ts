@@ -15,10 +15,13 @@ gsap.registerPlugin(ScrollTrigger);
         <div class="about-grid">
           <div class="about-portrait">
             <div class="portrait-frame">
-              <div class="portrait-img"></div>
               <div class="portrait-glow"></div>
-              <span class="portrait-initial">A</span>
+              <img class="portrait-img" src="assets/Aravind.jpeg"
+                   alt="Aravind — Full Stack Developer" loading="lazy" />
+              <div class="portrait-grade"></div>
               <span class="frame-tag">ARAVIND · FULL STACK</span>
+              <span class="frame-corner fc-tl"></span>
+              <span class="frame-corner fc-br"></span>
             </div>
             <div class="floating-chip chip-1">
               <span class="chip-dot"></span>
@@ -102,9 +105,30 @@ gsap.registerPlugin(ScrollTrigger);
     .portrait-img {
       position: absolute;
       inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 14%;
+      z-index: 1;
+      /* gentle grade so the photo harmonises with the dark/orange theme */
+      filter: contrast(1.06) saturate(1.05) brightness(1.02);
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
+    }
+    .portrait-frame:hover .portrait-img {
+      transform: scale(1.04);
+      filter: contrast(1.08) saturate(1.12) brightness(1.04);
+    }
+
+    /* warm wash + bottom fade for tag legibility */
+    .portrait-grade {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
       background:
-        radial-gradient(circle at 50% 30%, rgba(255, 77, 0, 0.18), transparent 60%),
-        linear-gradient(180deg, #161616, #050505);
+        linear-gradient(180deg, rgba(5,5,5,0.05) 0%, transparent 30%, transparent 60%, rgba(5,5,5,0.75) 100%),
+        radial-gradient(circle at 70% 25%, rgba(255, 77, 0, 0.16), transparent 55%);
+      mix-blend-mode: normal;
     }
 
     .portrait-glow {
@@ -112,32 +136,33 @@ gsap.registerPlugin(ScrollTrigger);
       bottom: -20%;
       left: 50%;
       transform: translateX(-50%);
-      width: 80%;
+      width: 85%;
       height: 60%;
-      background: radial-gradient(circle, rgba(255, 77, 0, 0.4), transparent 65%);
-      filter: blur(50px);
-    }
-
-    .portrait-initial {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 12rem;
-      font-weight: 800;
-      color: rgba(255, 255, 255, 0.06);
-      letter-spacing: -0.05em;
+      background: radial-gradient(circle, rgba(255, 77, 0, 0.45), transparent 65%);
+      filter: blur(55px);
+      z-index: 0;
     }
 
     .frame-tag {
       position: absolute;
       bottom: 20px;
       left: 20px;
+      z-index: 3;
       font-size: 0.65rem;
       letter-spacing: 0.28em;
-      color: var(--accent-color);
+      color: #fff;
       font-weight: 700;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
     }
+
+    .frame-corner {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      z-index: 3;
+    }
+    .fc-tl { top: 14px; left: 14px; border-top: 2px solid rgba(255,255,255,0.7); border-left: 2px solid rgba(255,255,255,0.7); }
+    .fc-br { bottom: 14px; right: 14px; border-bottom: 2px solid var(--accent-color); border-right: 2px solid var(--accent-color); }
 
     .floating-chip {
       position: absolute;
