@@ -19,7 +19,6 @@ gsap.registerPlugin(ScrollTrigger);
               <img class="portrait-img" src="assets/A1.jpeg"
                    alt="Aravind — Full Stack Developer" loading="lazy" />
               <div class="portrait-grade"></div>
-              <span class="frame-tag">ARAVIND · FULL STACK</span>
               <span class="frame-corner fc-tl"></span>
               <span class="frame-corner fc-br"></span>
             </div>
@@ -141,18 +140,6 @@ gsap.registerPlugin(ScrollTrigger);
       background: radial-gradient(circle, rgba(255, 77, 0, 0.45), transparent 65%);
       filter: blur(55px);
       z-index: 0;
-    }
-
-    .frame-tag {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      z-index: 3;
-      font-size: 0.65rem;
-      letter-spacing: 0.28em;
-      color: #fff;
-      font-weight: 700;
-      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
     }
 
     .frame-corner {
