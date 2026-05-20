@@ -345,7 +345,10 @@ const CONTACT_EMAIL = 'aravindofficial656@gmail.com';
     }
 
     .submit-btn {
-      padding: 18px;
+      padding: 0 18px;
+      min-height: 58px;
+      width: 100%;
+      box-sizing: border-box;
       border-radius: 15px;
       background: #fff;
       color: #000;
@@ -420,15 +423,16 @@ const CONTACT_EMAIL = 'aravindofficial656@gmail.com';
     .ripple {
       position: absolute;
       border-radius: 50%;
-      background: rgba(255, 77, 0, 0.4);
+      background: rgba(255, 77, 0, 0.35);
       pointer-events: none;
-      transform: scale(0);
-      animation: rippleOut 0.7s ease-out forwards;
+      transform: translate(-50%, -50%) scale(0);
+      transform-origin: center;
+      animation: rippleOut 0.6s ease-out forwards;
       z-index: 0;
     }
 
     @keyframes rippleOut {
-      to { transform: scale(4); opacity: 0; }
+      to { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
     }
 
     .status-msg {
@@ -543,13 +547,15 @@ export class ContactComponent implements AfterViewInit {
     const btn = event.currentTarget as HTMLElement;
     const rect = btn.getBoundingClientRect();
     const circle = document.createElement('span');
-    const size = Math.max(rect.width, rect.height);
+    // Keep the ripple tied to button height so it stays a subtle pulse,
+    // never a button-sized circle that looks like it's growing.
+    const size = rect.height * 1.4;
     circle.className = 'ripple';
     circle.style.width = circle.style.height = `${size}px`;
-    circle.style.left = `${event.clientX - rect.left - size / 2}px`;
-    circle.style.top = `${event.clientY - rect.top - size / 2}px`;
+    circle.style.left = `${event.clientX - rect.left}px`;
+    circle.style.top = `${event.clientY - rect.top}px`;
     btn.appendChild(circle);
-    setTimeout(() => circle.remove(), 700);
+    setTimeout(() => circle.remove(), 600);
   }
 
   async sendEmail() {
