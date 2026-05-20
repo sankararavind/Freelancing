@@ -23,6 +23,8 @@ paste the template here into EmailJS.
 - **Reply To**: `{{reply_to}}`
 - **Subject**: `New enquiry from {{from_name}}`
 
+Variables used in the body: `{{from_name}}`, `{{reply_to}}`, `{{phone}}`, `{{message}}`, `{{sent_at}}`.
+
 Switch the content editor to **Code / HTML** and paste:
 
 ```html
@@ -78,6 +80,11 @@ Switch the content editor to **Code / HTML** and paste:
                 <p style="margin:0 0 6px;font-size:11px;letter-spacing:2px;color:#ff9a3c;font-weight:700;">EMAIL</p>
                 <p style="margin:0 0 22px;font-size:16px;word-break:break-all;">
                   <a href="mailto:{{reply_to}}" style="color:#ff9a3c;text-decoration:none;">{{reply_to}}</a>
+                </p>
+
+                <p style="margin:0 0 6px;font-size:11px;letter-spacing:2px;color:#ff9a3c;font-weight:700;">MOBILE</p>
+                <p style="margin:0 0 22px;font-size:16px;">
+                  <a href="tel:{{phone}}" style="color:#ff9a3c;text-decoration:none;">{{phone}}</a>
                 </p>
 
                 <p style="margin:0 0 6px;font-size:11px;letter-spacing:2px;color:#ff9a3c;font-weight:700;">MESSAGE</p>
