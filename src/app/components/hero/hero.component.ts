@@ -7,7 +7,7 @@ import { gsap } from 'gsap';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section class="hero-section" #hero>
+    <section class="hero-section" id="hero" #hero>
       <div class="background-halo" #halo></div>
 
       <!-- Floating particles -->

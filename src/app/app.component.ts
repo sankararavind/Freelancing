@@ -2,8 +2,10 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HeroComponent } from './components/hero/hero.component';
+import { AboutComponent } from './components/about/about.component';
 import { ServicesComponent } from './components/services/services.component';
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
+import { TestimonialsComponent } from './components/testimonials/testimonials.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { TransitionComponent } from './components/transition/transition.component';
 import Lenis from 'lenis';
@@ -15,8 +17,10 @@ import Lenis from 'lenis';
     CommonModule,
     NavbarComponent,
     HeroComponent,
+    AboutComponent,
     ServicesComponent,
     PortfolioComponent,
+    TestimonialsComponent,
     ContactComponent,
     TransitionComponent
   ],

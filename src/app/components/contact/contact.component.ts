@@ -41,12 +41,14 @@ const CONTACT_EMAIL = 'aravindofficial656@gmail.com';
             </h2>
             <p class="intro">Tell me about your project, or just say hello.</p>
             <div class="social-links">
-              <a href="#" class="social-link"
+              <a class="social-link"
                  *ngFor="let s of socials"
+                 [href]="s.href"
+                 target="_blank" rel="noopener noreferrer"
                  (mouseenter)="hoverSocial($event, true)"
                  (mouseleave)="hoverSocial($event, false)">
                 <span class="sl-dot"></span>
-                {{ s }}
+                {{ s.label }}
               </a>
             </div>
 
@@ -542,7 +544,12 @@ const CONTACT_EMAIL = 'aravindofficial656@gmail.com';
 export class ContactComponent implements AfterViewInit {
   formData = { from_name: '', reply_to: '', phone: '', message: '' };
 
-  socials = ['LinkedIn', 'Twitter', 'Dribbble', 'GitHub'];
+  socials: Array<{ label: string; href: string }> = [
+    { label: 'GitHub',   href: 'https://github.com/sankararavind' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/YOUR_LINKEDIN' },
+    { label: 'WhatsApp', href: 'https://wa.me/91XXXXXXXXXX' },
+    { label: 'Email',    href: 'mailto:aravindofficial656@gmail.com' }
+  ];
   focused: 'name' | 'email' | 'phone' | 'message' | null = null;
 
   isSending = false;
