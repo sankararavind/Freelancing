@@ -16,9 +16,9 @@ gsap.registerPlugin(ScrollTrigger);
  * 5. Replace the three placeholders below.
  */
 const EMAILJS_CONFIG = {
-  serviceId: 'YOUR_SERVICE_ID',
-  templateId: 'YOUR_TEMPLATE_ID',
-  publicKey: 'YOUR_PUBLIC_KEY'
+  serviceId: 'service_w1hogks',
+  templateId: 'template_p7bmayr',
+  publicKey: 'b7cy6FrjVeMjH6HJ0'
 };
 
 const CONTACT_EMAIL = 'aravindofficial656@gmail.com';
