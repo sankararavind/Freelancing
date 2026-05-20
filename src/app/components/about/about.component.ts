@@ -16,7 +16,7 @@ gsap.registerPlugin(ScrollTrigger);
           <div class="about-portrait">
             <div class="portrait-frame">
               <div class="portrait-glow"></div>
-              <img class="portrait-img" src="assets/Aravind.jpeg"
+              <img class="portrait-img" src="assets/A1.jpeg"
                    alt="Aravind — Full Stack Developer" loading="lazy" />
               <div class="portrait-grade"></div>
               <span class="frame-tag">ARAVIND · FULL STACK</span>
