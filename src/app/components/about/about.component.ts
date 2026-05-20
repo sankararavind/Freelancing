@@ -179,8 +179,8 @@ gsap.registerPlugin(ScrollTrigger);
       white-space: nowrap;
       animation: chipFloat 5s ease-in-out infinite;
     }
-    .chip-1 { top: 14%; right: -12%; }
-    .chip-2 { bottom: 16%; left: -10%; animation-delay: -2s; color: var(--accent-color); }
+    .chip-1 { top: 22px; right: -16px; }
+    .chip-2 { bottom: 22px; right: -16px; animation-delay: -2s; color: var(--accent-color); }
 
     @keyframes chipFloat {
       0%, 100% { transform: translateY(0); }
@@ -315,8 +315,8 @@ gsap.registerPlugin(ScrollTrigger);
     @media (max-width: 900px) {
       .about-grid { grid-template-columns: 1fr; gap: 70px; }
       .about-portrait { max-width: 360px; }
-      .chip-1 { right: 0; }
-      .chip-2 { left: 0; }
+      .chip-1 { right: 10px; }
+      .chip-2 { right: 10px; }
     }
   `]
 })
