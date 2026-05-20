@@ -1,6 +1,6 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import emailjs from '@emailjs/browser';
@@ -62,33 +62,70 @@ const CONTACT_EMAIL = 'aravindofficial656@gmail.com';
             </div>
           </div>
 
-          <form (ngSubmit)="sendEmail()" #contactForm="ngForm" class="contact-form">
-            <div class="input-group" [class.filled]="!!formData.from_name" [class.focused]="focused === 'name'">
+          <form (ngSubmit)="sendEmail(contactForm)" #contactForm="ngForm" class="contact-form" novalidate>
+            <div class="input-group"
+                 [class.filled]="!!formData.from_name"
+                 [class.focused]="focused === 'name'"
+                 [class.invalid]="nameRef.invalid && (nameRef.touched || contactForm.submitted)">
               <label>Your name</label>
-              <input type="text" name="from_name"
+              <input type="text" name="from_name" #nameRef="ngModel"
                      [(ngModel)]="formData.from_name"
                      (focus)="focused = 'name'"
                      (blur)="focused = null"
-                     required>
+                     required minlength="2">
               <span class="input-underline"></span>
+              <span class="field-error" *ngIf="nameRef.invalid && (nameRef.touched || contactForm.submitted)">
+                {{ nameRef.errors?.['required'] ? 'Please enter your name' : 'Name is too short' }}
+              </span>
             </div>
-            <div class="input-group" [class.filled]="!!formData.reply_to" [class.focused]="focused === 'email'">
+
+            <div class="input-group"
+                 [class.filled]="!!formData.reply_to"
+                 [class.focused]="focused === 'email'"
+                 [class.invalid]="emailRef.invalid && (emailRef.touched || contactForm.submitted)">
               <label>Your email</label>
-              <input type="email" name="reply_to"
+              <input type="email" name="reply_to" #emailRef="ngModel"
                      [(ngModel)]="formData.reply_to"
                      (focus)="focused = 'email'"
                      (blur)="focused = null"
-                     required>
+                     required email>
               <span class="input-underline"></span>
+              <span class="field-error" *ngIf="emailRef.invalid && (emailRef.touched || contactForm.submitted)">
+                {{ emailRef.errors?.['required'] ? 'Please enter your email' : 'Enter a valid email address' }}
+              </span>
             </div>
-            <div class="input-group" [class.filled]="!!formData.message" [class.focused]="focused === 'message'">
+
+            <div class="input-group"
+                 [class.filled]="!!formData.phone"
+                 [class.focused]="focused === 'phone'"
+                 [class.invalid]="phoneRef.invalid && (phoneRef.touched || contactForm.submitted)">
+              <label>Your mobile number</label>
+              <input type="tel" name="phone" #phoneRef="ngModel"
+                     [(ngModel)]="formData.phone"
+                     (focus)="focused = 'phone'"
+                     (blur)="focused = null"
+                     required pattern="[+]?[0-9 ()-]{7,16}"
+                     inputmode="tel">
+              <span class="input-underline"></span>
+              <span class="field-error" *ngIf="phoneRef.invalid && (phoneRef.touched || contactForm.submitted)">
+                {{ phoneRef.errors?.['required'] ? 'Please enter your mobile number' : 'Enter a valid phone number' }}
+              </span>
+            </div>
+
+            <div class="input-group"
+                 [class.filled]="!!formData.message"
+                 [class.focused]="focused === 'message'"
+                 [class.invalid]="msgRef.invalid && (msgRef.touched || contactForm.submitted)">
               <label>Your message</label>
-              <textarea name="message" rows="5"
+              <textarea name="message" rows="5" #msgRef="ngModel"
                         [(ngModel)]="formData.message"
                         (focus)="focused = 'message'"
                         (blur)="focused = null"
-                        required></textarea>
+                        required minlength="10"></textarea>
               <span class="input-underline"></span>
+              <span class="field-error" *ngIf="msgRef.invalid && (msgRef.touched || contactForm.submitted)">
+                {{ msgRef.errors?.['required'] ? 'Please write a short message' : 'Message should be at least 10 characters' }}
+              </span>
             </div>
 
             <button type="submit"
@@ -344,6 +381,31 @@ const CONTACT_EMAIL = 'aravindofficial656@gmail.com';
       transform: scaleX(1);
     }
 
+    /* Validation states */
+    .input-group.invalid input,
+    .input-group.invalid textarea {
+      border-color: rgba(255, 68, 68, 0.65);
+    }
+
+    .input-group.invalid .input-underline {
+      background: #ff4444;
+      transform: scaleX(1);
+    }
+
+    .field-error {
+      display: block;
+      margin-top: 8px;
+      font-size: 0.78rem;
+      color: #ff6b6b;
+      letter-spacing: 0.01em;
+      animation: fieldErrIn 0.3s ease;
+    }
+
+    @keyframes fieldErrIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
     .submit-btn {
       padding: 0 18px;
       min-height: 58px;
@@ -478,10 +540,10 @@ const CONTACT_EMAIL = 'aravindofficial656@gmail.com';
   `]
 })
 export class ContactComponent implements AfterViewInit {
-  formData = { from_name: '', reply_to: '', message: '' };
+  formData = { from_name: '', reply_to: '', phone: '', message: '' };
 
   socials = ['LinkedIn', 'Twitter', 'Dribbble', 'GitHub'];
-  focused: 'name' | 'email' | 'message' | null = null;
+  focused: 'name' | 'email' | 'phone' | 'message' | null = null;
 
   isSending = false;
   statusMessage = '';
@@ -558,14 +620,24 @@ export class ContactComponent implements AfterViewInit {
     setTimeout(() => circle.remove(), 600);
   }
 
-  async sendEmail() {
+  async sendEmail(form: NgForm) {
     if (this.isSending) return;
+
+    // Block submission and surface every error if the form is invalid
+    if (form.invalid) {
+      Object.values(form.controls).forEach((c) => c.markAsTouched());
+      this.statusType = 'error';
+      this.statusMessage = 'Please fix the highlighted fields before sending.';
+      return;
+    }
+
     this.isSending = true;
     this.statusMessage = '';
 
     const templateParams = {
       from_name: this.formData.from_name,
       reply_to: this.formData.reply_to,
+      phone: this.formData.phone,
       message: this.formData.message,
       to_email: CONTACT_EMAIL,
       sent_at: new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })
@@ -578,7 +650,7 @@ export class ContactComponent implements AfterViewInit {
       this.statusMessage = 'Opening your email app… (add EmailJS keys to send automatically)';
       const subject = encodeURIComponent(`New project enquiry from ${this.formData.from_name}`);
       const body = encodeURIComponent(
-        `Name: ${this.formData.from_name}\nEmail: ${this.formData.reply_to}\n\n${this.formData.message}`
+        `Name: ${this.formData.from_name}\nEmail: ${this.formData.reply_to}\nMobile: ${this.formData.phone}\n\n${this.formData.message}`
       );
       window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
       return;
@@ -594,7 +666,8 @@ export class ContactComponent implements AfterViewInit {
       this.isSending = false;
       this.statusType = 'success';
       this.statusMessage = "Message sent — I'll get back to you within a day.";
-      this.formData = { from_name: '', reply_to: '', message: '' };
+      this.formData = { from_name: '', reply_to: '', phone: '', message: '' };
+      form.resetForm();
     } catch (err) {
       console.error('EmailJS error:', err);
       this.isSending = false;
