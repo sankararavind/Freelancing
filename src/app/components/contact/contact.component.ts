@@ -3,8 +3,25 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import emailjs from '@emailjs/browser';
 
 gsap.registerPlugin(ScrollTrigger);
+
+/**
+ * EmailJS configuration.
+ * 1. Create a free account at https://www.emailjs.com
+ * 2. Add an email service connected to aravindofficial656@gmail.com  → copy its Service ID
+ * 3. Create an email template (paste the HTML from EMAIL_TEMPLATE.md) → copy its Template ID
+ * 4. Account → API keys → copy your Public Key
+ * 5. Replace the three placeholders below.
+ */
+const EMAILJS_CONFIG = {
+  serviceId: 'YOUR_SERVICE_ID',
+  templateId: 'YOUR_TEMPLATE_ID',
+  publicKey: 'YOUR_PUBLIC_KEY'
+};
+
+const CONTACT_EMAIL = 'aravindofficial656@gmail.com';
 
 @Component({
   selector: 'app-contact',
@@ -36,7 +53,7 @@ gsap.registerPlugin(ScrollTrigger);
             <div class="info-grid">
               <div class="info-item">
                 <span class="info-label">Email</span>
-                <span class="info-value">hello&#64;aravind.dev</span>
+                <a class="info-value email-link" href="mailto:aravindofficial656&#64;gmail.com">aravindofficial656&#64;gmail.com</a>
               </div>
               <div class="info-item">
                 <span class="info-label">Based in</span>
@@ -443,6 +460,13 @@ gsap.registerPlugin(ScrollTrigger);
       to   { opacity: 1; transform: translateY(0);   }
     }
 
+    .email-link {
+      transition: color 0.3s ease;
+    }
+    .email-link:hover {
+      color: var(--accent-color);
+    }
+
     @media (max-width: 1024px) {
       .contact-grid { grid-template-columns: 1fr; gap: 60px; }
       .container    { padding: 50px; }
@@ -528,19 +552,48 @@ export class ContactComponent implements AfterViewInit {
     setTimeout(() => circle.remove(), 700);
   }
 
-  sendEmail() {
+  async sendEmail() {
+    if (this.isSending) return;
     this.isSending = true;
     this.statusMessage = '';
 
-    // Replace with actual EmailJS credentials later
-    // emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', this.formData, 'YOUR_PUBLIC_KEY')
+    const templateParams = {
+      from_name: this.formData.from_name,
+      reply_to: this.formData.reply_to,
+      message: this.formData.message,
+      to_email: CONTACT_EMAIL,
+      sent_at: new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })
+    };
 
-    setTimeout(() => {
-      console.log('Form submitted:', this.formData);
+    // Until the EmailJS credentials are filled in, fall back to a mailto draft
+    if (EMAILJS_CONFIG.serviceId === 'YOUR_SERVICE_ID') {
       this.isSending = false;
-      this.statusMessage = 'Message sent successfully! (Simulation)';
       this.statusType = 'success';
+      this.statusMessage = 'Opening your email app… (add EmailJS keys to send automatically)';
+      const subject = encodeURIComponent(`New project enquiry from ${this.formData.from_name}`);
+      const body = encodeURIComponent(
+        `Name: ${this.formData.from_name}\nEmail: ${this.formData.reply_to}\n\n${this.formData.message}`
+      );
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+      return;
+    }
+
+    try {
+      await emailjs.send(
+        EMAILJS_CONFIG.serviceId,
+        EMAILJS_CONFIG.templateId,
+        templateParams,
+        { publicKey: EMAILJS_CONFIG.publicKey }
+      );
+      this.isSending = false;
+      this.statusType = 'success';
+      this.statusMessage = "Message sent — I'll get back to you within a day.";
       this.formData = { from_name: '', reply_to: '', message: '' };
-    }, 2000);
+    } catch (err) {
+      console.error('EmailJS error:', err);
+      this.isSending = false;
+      this.statusType = 'error';
+      this.statusMessage = 'Something went wrong. Please email aravindofficial656@gmail.com directly.';
+    }
   }
 }
