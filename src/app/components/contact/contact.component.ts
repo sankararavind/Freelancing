@@ -310,6 +310,7 @@ const CONTACT_EMAIL = 'aravindofficial656@gmail.com';
     .info-value {
       font-size: 1rem;
       font-weight: 600;
+      word-break: break-word;
     }
 
     .contact-form {
@@ -536,8 +537,25 @@ const CONTACT_EMAIL = 'aravindofficial656@gmail.com';
     }
 
     @media (max-width: 1024px) {
-      .contact-grid { grid-template-columns: 1fr; gap: 60px; }
-      .container    { padding: 50px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 50px; }
+      .container    { padding: 48px; border-radius: 36px; }
+    }
+
+    @media (max-width: 640px) {
+      .contact-section { padding: 70px 0; margin-bottom: 20px; }
+      .container { width: 92%; padding: 30px 22px; border-radius: 26px; }
+      .contact-grid { gap: 40px; }
+      .intro { font-size: 1.05rem; margin-bottom: 28px; }
+      .social-links { gap: 10px; margin-bottom: 36px; }
+      .social-link { padding: 9px 14px; font-size: 0.8rem; }
+      .info-grid { gap: 18px; }
+      .contact-form { gap: 22px; }
+      .input-group input, .input-group textarea { font-size: 1rem; }
+      .aura { width: 360px; height: 360px; }
+    }
+
+    @media (max-width: 380px) {
+      .info-grid { grid-template-columns: 1fr; }
     }
   `]
 })
@@ -547,7 +565,7 @@ export class ContactComponent implements AfterViewInit {
   socials: Array<{ label: string; href: string }> = [
     { label: 'GitHub',   href: 'https://github.com/sankararavind' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/YOUR_LINKEDIN' },
-    { label: 'WhatsApp', href: 'https://wa.me/91XXXXXXXXXX' },
+    { label: 'WhatsApp', href: 'https://wa.me/919381765292' },
     { label: 'Email',    href: 'mailto:aravindofficial656@gmail.com' }
   ];
   focused: 'name' | 'email' | 'phone' | 'message' | null = null;
