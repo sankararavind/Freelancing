@@ -348,10 +348,10 @@ export class ServicesComponent implements AfterViewInit {
       link: "https://sankararavind.github.io/DemoHospital/"
     },
     {
-      title: "Hostel Sites",
-      icon: "⬟",
-      desc: "Modern hostel sites with dorm and room bookings, group plans, and rich photo galleries.",
-      tags: ["Bookings", "Multi-room", "Gallery"]
+      title: "E-commerce Stores",
+      icon: "⬢",
+      desc: "Fast, conversion-focused online stores with carts, secure checkout, and easy product management.",
+      tags: ["Cart & Checkout", "Payments", "Inventory"]
     },
     {
       title: "Business Applications",

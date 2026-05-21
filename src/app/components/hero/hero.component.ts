@@ -521,7 +521,7 @@ export class HeroComponent implements AfterViewInit {
     { num: "/ 01", label: "Hotel Sites" },
     { num: "/ 02", label: "Restaurant Sites" },
     { num: "/ 03", label: "Hospital Sites" },
-    { num: "/ 04", label: "Hostel Sites" },
+    { num: "/ 04", label: "E-commerce" },
     { num: "/ 05", label: "Business Apps" }
   ];
 
