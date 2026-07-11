@@ -55,10 +55,6 @@ gsap.registerPlugin(ScrollTrigger);
             </div>
 
             <div class="about-cta fade-in">
-              <a href="Aravind-CV.pdf" download class="cv-btn">
-                <span class="cv-icon">↓</span>
-                <span>Download CV</span>
-              </a>
               <a href="#contact" class="lets-talk" (click)="scrollTo($event, '#contact')">
                 Let's talk
                 <span class="lt-arrow">→</span>
@@ -311,9 +307,8 @@ export class AboutComponent implements AfterViewInit {
   titleWords = ['Building', 'digital', 'things,', 'the', 'right', 'way.'];
 
   stack = [
-    'Angular', 'TypeScript', 'JavaScript', 'Node.js',
-    'Express', 'REST APIs', 'MongoDB', 'PostgreSQL',
-    'GSAP', 'Figma', 'Responsive UI', 'Git'
+    'Angular', 'TypeScript', 'ASP.NET', 'REST APIs',
+    'MongoDB', 'SQL', 'Responsive UI', 'Git'
   ];
 
   ngAfterViewInit() {

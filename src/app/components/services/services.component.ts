@@ -327,13 +327,6 @@ export class ServicesComponent implements AfterViewInit {
     link?: string;
   }> = [
     {
-      title: "Hotel Websites",
-      icon: "✧",
-      desc: "Premium, high-converting websites for hotels with seamless booking integrations.",
-      tags: ["Booking API", "CMS", "Concierge"],
-      link: "https://sankararavind.github.io/Demorestaurant/"
-    },
-    {
       title: "Restaurant Sites",
       icon: "◆",
       desc: "Mouth-watering menus, table reservations, and online ordering built to fill seats.",
@@ -352,6 +345,13 @@ export class ServicesComponent implements AfterViewInit {
       icon: "⬢",
       desc: "Fast, conversion-focused online stores with carts, secure checkout, and easy product management.",
       tags: ["Cart & Checkout", "Payments", "Inventory"]
+    },
+    {
+      title: "Event Management",
+      icon: "✺",
+      desc: "Eye-catching websites for event planners with galleries, packages, and instant enquiries.",
+      tags: ["Galleries", "Packages", "Enquiries"],
+      link: "https://mahadevevent.netlify.app/"
     },
     {
       title: "Business Applications",
