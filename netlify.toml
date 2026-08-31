@@ -1,0 +1,12 @@
+[build]
+  command = "npm run build:prod"
+  publish = "dist/developer-portfolio/browser"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA fallback: let the Angular router handle all client-side routes
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
